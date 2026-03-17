@@ -118,24 +118,3 @@ Este documento contiene los escenarios de prueba generados por la IA (SKAI) en l
 | TC-08 | Registro con email duplicado                | Validar respuesta del backend, códigos HTTP y prevención de race conditions         | Se amplía para cubrir concurrencia y consistencia de datos                                                |
 | TC-09 | Toggle login/registro                       | Validar cambio de estado del formulario, renderizado dinámico y mantenimiento de estado | La IA no contempla comportamiento del estado UI ni persistencia de datos entre vistas                     |
 ---
-
-## Notas Técnicas de QA
-
-- Técnicas ISTQB aplicadas:  
-  - Partición de Equivalencia  
-  - Valores Límite  
-  - Transición de Estados  
-
-- Arquitectura:  
-  - React SPA con API REST  
-  - JWT para autenticación  
-
-- Stack de Automatización:  
-  - Selenium WebDriver  
-  - Serenity BDD  
-  - Gradle  
-  - Java  
-
-- Patrones:  
-  - Page Object Model (POM)  
-  - Screenplay  
