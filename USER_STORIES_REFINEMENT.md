@@ -135,28 +135,10 @@ Como nuevo usuario del sistema de restaurante, quiero crear una cuenta proporcio
 
 # 📊 Cuadro Comparativo - Historias de Usuario (Frontend)
 
----
-
-## 🔐 HU-FRONT-010: Iniciar Sesión (Login)
-
-| HU Original | HU Refinada | Diferencias Detectadas |
-|------------|------------|------------------------|
-| **Como** usuario del sistema de restaurante  <br> **Quiero** iniciar sesión con mis credenciales  <br> **Para** acceder al sistema y gestionar pedidos | **Como** usuario registrado del sistema de restaurante  <br> **Quiero** autenticarme mediante email y password  <br> **Para** acceder de forma segura al panel de gestión de pedidos y obtener un token de sesión válido | - Se especificó **"usuario registrado"** para mayor precisión del actor  <br> - Se añadió detalle técnico del mecanismo **JWT**  <br> - Se añadió criterio de **"recordarme"** con expiración extendida  <br> - Se añadió el escenario de **modo demo sin cuenta** |
-
----
-
-## 🚪 HU-FRONT-011: Cerrar Sesión (Logout)
-
-| HU Original | HU Refinada | Diferencias Detectadas |
-|------------|------------|------------------------|
-| **Como** usuario autenticado  <br> **Quiero** cerrar sesión  <br> **Para** salir del sistema y proteger mi cuenta | **Como** usuario autenticado con sesión activa  <br> **Quiero** cerrar sesión de forma manual o automática  <br> **Para** invalidar el token de autenticación y proteger mi cuenta de accesos no autorizados | - Se añadió condición **"con sesión activa"** como precondición  <br> - Se añadió el escenario de **logout automático por expiración de token**  <br> - Se añadió **limpieza de datos de sesión en el cliente** |
-
----
-
-## 🧾 HU-FRONT-012: Registro de Usuario
-
-| HU Original | HU Refinada | Diferencias Detectadas |
-|------------|------------|------------------------|
-| **Como** nuevo usuario del sistema  <br> **Quiero** registrarme con mis datos  <br> **Para** poder acceder al sistema y gestionar pedidos | **Como** nuevo usuario del sistema de restaurante  <br> **Quiero** crear una cuenta proporcionando email válido, username único y password segura  <br> **Para** obtener acceso autenticado al sistema de gestión de pedidos | - Se añadió validación de formato de email (**sintaxis RFC**)  <br> - Se añadió validación de longitud de username (**3-20 caracteres**)  <br> - Se añadió política de password (**mínimo 8 caracteres, mayúscula, número**)  <br> - Se añadió verificación de **unicidad de email y username**  <br> - Se añadió generación de **token JWT post-registro** |
+| HU original | HU refinada por la instrucción | Diferencias detectadas |
+|------------|-------------------------------|------------------------|
+| HU-FRONT-010: Login  <br> Como usuario  <br> Quiero iniciar sesión  <br> Para entrar al sistema | HU-FRONT-010: Iniciar Sesión (Login)  <br> Como usuario registrado del sistema de restaurante  <br> Quiero autenticarme mediante email y password  <br> Para acceder de forma segura al panel de gestión de pedidos y obtener un token de sesión válido | - Se especificó **"usuario registrado"** para mayor precisión del actor  <br> - Se añadió detalle técnico del mecanismo **JWT**  <br> - Se añadió criterio de **"recordarme"** con expiración extendida  <br> - Se añadió el escenario de **modo demo sin cuenta** |
+| HU-FRONT-011: Logout  <br> Como usuario  <br> Quiero cerrar sesión  <br> Para salir del sistema | HU-FRONT-011: Cerrar Sesión (Logout)  <br> Como usuario autenticado con sesión activa  <br> Quiero cerrar sesión de forma manual o automática  <br> Para invalidar el token de autenticación y proteger mi cuenta de accesos no autorizados | - Se añadió condición **"con sesión activa"** como precondición  <br> - Se añadió el escenario de **logout automático por expiración de token**  <br> - Se añadió **limpieza de datos de sesión en el cliente** |
+| HU-FRONT-012: Registro  <br> Como usuario nuevo  <br> Quiero registrarme  <br> Para usar el sistema | HU-FRONT-012: Registro de Usuario  <br> Como nuevo usuario del sistema de restaurante  <br> Quiero crear una cuenta proporcionando email válido, username único y password segura  <br> Para obtener acceso autenticado al sistema de gestión de pedidos | - Se añadió validación de formato de email (**sintaxis RFC**)  <br> - Se añadió validación de longitud de username (**3-20 caracteres**)  <br> - Se añadió política de password (**mínimo 8 caracteres, mayúscula, número**)  <br> - Se añadió verificación de **unicidad de email y username**  <br> - Se añadió generación de **token JWT post-registro** |
 
 ---
