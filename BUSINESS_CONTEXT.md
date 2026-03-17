@@ -1,61 +1,102 @@
-# FoodTech Frontend - Contexto de Negocio
+# Contexto de Negocio - FoodTech Frontend
 
-## 1. Descripcion del Proyecto
+## 1. Descripción del Proyecto
 
-Nombre del Proyecto: FoodTech Frontend
+**Nombre del Proyecto:** FoodTech Frontend - Vista de Mesero
 
-Objetivo: Proporcionar una interfaz de usuario para gestionar pedidos, ver y filtrar tareas por estaciones, revisar historial y gestionar usuarios. El frontend consume una API REST segura y maneja la autenticacion mediante JWT, mostrando dashboards, formularios y flujos operativos para usuarios autenticados y demostra la experiencia de usuario de un flujo ofrecido por el backend FoodTech Kitchen Service.
+**Objetivo del Proyecto:** Sistema de gestión de pedidos para meseros en restaurante. Permite visualizar disponibilidad de mesas, construir pedidos por categorías de productos, enviarlos a cocina y monitorear el estado de las órdenes en tiempo real.
 
-La arquitectura del frontend se alinea con practicas modernas (SPA, componentes reutilizables, gestion de estado) para facilitar la navegacion entre modulos como: inicio de sesion, registro de usuario, gestion de pedidos, visualizacion de tareas por estacion y facturacion en el plano visual, manteniendo la integridad de los datos recibidos desde el backend.
+El frontend está desarrollado en **React + TypeScript** siguiendo una arquitectura hexagonal, consumiendo una API REST del backend.
 
 ---
 
-## 2. Flujos Criticos del Negocio
+## 2. Flujos Críticos del Negocio
 
-- Inicio de sesion y gestion de sesion (JWT) para acceso a endpoints protegidos.
-- Creacion y gestion de pedidos desde el frontend, con validaciones basicas en el cliente antes de llamar a la API.
-- Visualizacion de tareas por estacion, con filtros y campos relevantes para el usuario: numero de mesa, productos, hora de creacion, estado y identificador de la tarea.
-- Flujo de facturacion, requerimiento de estado COMPLETED para activar la facturacion y notificaciones de fallo.
-- Notificaciones de errores claras y consistentes (formatos JSON, canales de presentacion en UI).
+### Principales Flujos de Trabajo:
+
+**1. Autenticación de Usuario**
+- Registro de nuevos usuarios con email, username y password.
+- Inicio de sesión con credenciales válidas.
+- Opción "recordarme" para sesión persistente.
+- Acceso sin cuenta mediante modo demo.
+- Cierre de sesión manual o por expiración de token.
+
+**2. Gestión de Mesas**
+- Visualización de disponibilidad de mesas en tiempo real.
+- Selección de mesa para crear pedido.
+
+**3. Construcción de Pedido**
+- Navegación por categorías de productos (bebidas, platos calientes, platos fríos).
+- Selección de múltiples productos.
+- Modificación del pedido antes de enviarlo.
+- Envío del pedido completo a cocina.
+
+**4. Monitoreo de Órdenes**
+- Visualización del estado y progreso de órdenes.
+- Actualización automática de estados mediante polling.
 
 ---
 
 ## 3. Reglas de Negocio y Restricciones
 
-- El frontend debe validar entradas basicas: numero de mesa, al menos un producto, y que los campos obligatorios esten presentes antes de enviar a la API.
-- El estado de las tareas y pedidos se deriva de la respuesta del backend; el frontend debe reflejar los estados y garantizar que las transiciones validas sean mostradas a los usuarios.
-- La autenticacion se maneja a traves de JWT obtenido al login; las llamadas protegidas requieren el token valido.
-- Errores de conectividad o respuesta del backend deben mostrarse al usuario con un formato estandar. 
+### Reglas de Negocio Relevantes:
+
+- **Autenticación JWT:** El sistema utiliza tokens JWT para la autenticación de usuarios.
+- **Sesión persistente (rememberMe):** Cuando se marca "recordarme", el token se guarda con una fecha de expiración extendida y persiste después de cerrar el navegador.
+- **Expiración de token:** El token JWT expira después de un tiempo definido, forzando logout automático.
+- **Unicidad de registro:** El email y username deben ser únicos en el sistema.
+- **Token requerido:** Todas las requests a endpoints protegidos requieren el token en el header.
+
+### Regulaciones o Normativas:
+
+- No se identifican normativas legales explícitas.
+- Se aplicarán prácticas de seguridad estándar para manejo de credenciales y tokens.
 
 ---
 
 ## 4. Perfiles de Usuario y Roles
 
-- Usuario Autenticado: usuarios que han iniciado sesion y consumen endpoints protegidos.
-- Operadores de Fachada: visibilidad de tareas por estacion, consulta de estado, y acciones permitidas segun el flujo de negocio (p. ej., iniciar/monitorizar tareas) en el frontend;
-- A nivel frontend no se implementan permisos a nivel fino sino rutas protegidas y habilitacion de acciones segun el estado de la entidad.
+### Perfiles o Roles de Usuario en el Sistema:
+
+**Mesero (Waiter)**
+- Usuario principal del sistema.
+- Puede crear pedidos, seleccionar mesas, monitorear estados.
+
+**Usuario Demo**
+- Acceso sin registro completo.
+- Funcionalidad limitada para pruebas.
+
+### Permisos y Limitaciones de Cada Perfil:
+
+- **Usuario registrado:** Acceso completo a funcionalidades de mesero.
+- **Usuario demo:** Acceso de solo lectura o funcionalidad parcial.
 
 ---
 
-## 5. Condiciones del Entorno Tecnico
+## 5. Condiciones del Entorno Técnico
 
-- Plataforma: Frontend SPA (React o similar) con TypeScript para tipado, gestion de estado y llamadas a API.
-- Comunicaciones: REST API con JWT; la token se envia en el header Authorization para endpoints protegidos.
-- Almacenamiento: token de sesion en almacenamiento seguro (preferentemente almacenamiento seguro del navegador o cookies http-only si el servidor habilita CORS y cookies). Se recomienda evitar exponer el token en el almacenamiento local cuando sea posible.
-- Pruebas: cobertura con pruebas unitarias de componentes, pruebas de integracion para flujos de login/registro y pruebas de extremo a extremo para flujos criticos.
-- Entorno: pruebas locales con docker-compose simulando el backend, o entornos de staging.
+### Plataformas Soportadas:
+
+- **Web:** Aplicación React SPA con soporte responsivo.
+
+### Tecnologías o Integraciones Clave:
+
+- **Frontend:** React 18, TypeScript, Vite
+- **Estilo:** CSS Modules / Styled Components
+- **Estado:** React Context + Hooks
+- **Comunicación:** API REST con fetch/axios
+- **Autenticación:** JWT (JSON Web Tokens)
+- **Arquitectura:** Hexagonal (Ports & Adapters)
+- **Contenerización:** Docker
 
 ---
 
 ## 6. Casos Especiales o Excepciones
 
-- Sesiones caducadas o token invalido: redirigir a login, mostrar alerta explicita.
-- Fallos en llamadas a la API: mostrar mensaje de error, registrar en logs UI y permitir reintento manual.
-- Campos obligatorios ausentes: mostrar errores claros junto a cada campo.
-- Registro de usuario duplicado: mostrar conflicto (409) y explicitar que el email/usuario ya existe.
+### Escenarios Alternos o Excepciones que Deben Considerarse:
 
----
-
-## Recomendaciones de Uso
-- El front debe permanecer alineado con las respuestas del backend; cualquier cambio en el modelo de datos debe ser reflejado en el frontend.
-- Mantener consistencia visual y una UX centrada en menus, filtros y acciones faciles para operadores y clientes.
+- **Credenciales inválidas:** Mostrar mensaje de error "Credenciales inválidas" sin iniciar sesión.
+- **Token expirado:** Logout automático y redirección a login.
+- **Email duplicado en registro:** Mostrar error y no crear la cuenta.
+- **Fallo en guardado de token:** Manejo de errores en localStorage/sessionStorage.
+- **Sesión demo:** Crear sesión temporal sin autenticación real.
