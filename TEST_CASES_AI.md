@@ -104,20 +104,19 @@ Este documento contiene los escenarios de prueba generados por la IA (SKAI) en l
 
 ---
 
-## Análisis de Casos de Prueba vs Implementación
+## Análisis de Casos de Prueba vs Implementación (Refinado)
 
-| ID    | Caso de Prueba generado por la instrucción       | Ajuste del probador                                      | Razón del ajuste                                      |
-|-------|------------------------------------------------|----------------------------------------------------------|------------------------------------------------------|
-| TC-01 | Login exitoso con credenciales válidas         | Añadir verificación de guardado de token en localStorage | La IA no especifica dónde se guarda el token         |
-| TC-02 | Login con credenciales inválidas               | Mismo caso                                              | No aplica                                            |
-| TC-03 | Login con "recordarme"                         | Verificar tiempo exacto de expiración extendida         | La IA no especifica el TTL                          |
-| TC-04 | Modo demo                                     | Verificar alcance de funcionalidades limitadas          | La IA no específica qué funcionalidades están limitadas |
-| TC-05 | Logout exitoso                                | Añadir verificación de limpieza de datos de sesión      | Verificar que se eliminen todos los datos           |
-| TC-06 | Token expirado                                | Verificar tiempo de expiración del JWT                  | La IA no especifica el TTL del token               |
-| TC-07 | Registro exitoso                              | Añadir verificación de password hasheada                | La password debe guardarse hasheada                |
-| TC-08 | Registro con email duplicado                  | Mismo caso                                              | No aplica                                            |
-| TC-09 | Toggle login/registro                         | Añadir verificación de cambio visual del formulario     | Validar que los campos cambien correctamente       |
-
+| ID    | Caso de Prueba generado por la IA              | Ajuste del probador                                                                 | Razón del ajuste                                                                                          |
+|-------|----------------------------------------------|-------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|
+| TC-01 | Login exitoso con credenciales válidas       | Verificar persistencia del token (localStorage/sessionStorage) y estructura del JWT | La IA no contempla validación del mecanismo de almacenamiento ni la integridad del token (payload, claims) |
+| TC-02 | Login con credenciales inválidas             | Validar manejo de errores (HTTP 401/403) y mensajes de feedback al usuario          | Se amplía para cubrir validación de respuesta del backend y experiencia de usuario                        |
+| TC-03 | Login con "recordarme"                       | Validar diferencia entre sesión persistente y sesión temporal + TTL configurable    | La IA no diferencia tipos de almacenamiento ni define comportamiento según configuración de seguridad     |
+| TC-04 | Modo demo                                   | Validar restricciones funcionales, control de permisos y aislamiento de datos       | Se requiere asegurar que el modo demo no comprometa datos reales ni permita acciones críticas             |
+| TC-05 | Logout exitoso                              | Verificar limpieza completa (storage, cookies, estado global) y revocación de token | La IA no considera invalidación del token ni limpieza total del estado de la aplicación                   |
+| TC-06 | Token expirado                              | Validar manejo automático (interceptor), refresh token y redirección controlada     | Se amplía para cubrir estrategias reales de autenticación (refresh tokens, silent logout)                |
+| TC-07 | Registro exitoso                            | Validar políticas de seguridad (hash, validaciones, complejidad de password)        | La IA no contempla estándares de seguridad (OWASP, validaciones, cifrado adecuado)                       |
+| TC-08 | Registro con email duplicado                | Validar respuesta del backend, códigos HTTP y prevención de race conditions         | Se amplía para cubrir concurrencia y consistencia de datos                                                |
+| TC-09 | Toggle login/registro                       | Validar cambio de estado del formulario, renderizado dinámico y mantenimiento de estado | La IA no contempla comportamiento del estado UI ni persistencia de datos entre vistas                     |
 ---
 
 ## Notas Técnicas de QA
