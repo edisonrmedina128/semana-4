@@ -1,72 +1,162 @@
-# Refinement de Historias de Usuario - FoodTech Frontend
+# Refinamiento de Historias de Usuario - FoodTech Frontend
 
-Acontinuacion se presentan las historias de usuario refinadas para el frontend, derivadas de las HU originales del dominio y adaptadas para las interacciones de la capa de presentacion. Se mantiene el foco en responsabilidades del frontend: login, registro, gestion de sesion, visualizacion de tareas por estacion y notificaciones de errores.
-
-Cambios principales: separacion de flujos de autenticacion, gestion de sesiones, y definicion de criterios de aceptacion para escenarios de UI.
-
-## HU-FRONT-010: Iniciar Sesion (Login)
-
-**Como** usuario del sistema de restaurante  
-**Quiero** iniciar sesion con mis credenciales  
-**Para** acceder al sistema y gestionar pedidos
-
-### Criterios de Aceptacion
-```
-Scenario: Usuario inicia sesion con email y password correctos
-  Given que el usuario tiene una cuenta registrada
-  When el usuario ingresa email y password correctos
-  Then el sistema inicia sesion exitosamente
-  And guarda el token de autenticacion
-  And redirige a la vista principal
-```
-
-### Escenarios (UI)
-- Login exitoso muestra el dashboard y guarda el token en almacenamiento de sesion.
-- Login fallido muestra alerta coherente y no permite acceder.
-
-## HU-FRONT-011: Cerrar Sesion (Logout)
-
-**Como** usuario autenticado  
-**Quiero** cerrar sesion  
-**Para** salir del sistema y proteger mi cuenta
-
-### Criterios de Aceptacion
-```
-Scenario: Logout exitoso
-  Given que el usuario esta autenticado
-  When el usuario hace click en "Cerrar Sesion"
-  Then el sistema elimina el token de autenticacion
-  And redirige a la pagina de login
-```
-
-### Escenarios (UI)
-- Cerrar sesion borra token, limpia estado de la app y devuelve al login.
-- Si la sesion expira, redirige automaticamente al login.
-
-## HU-FRONT-012: Registro de Usuario
-
-**Como** nuevo usuario del sistema  
-**Quiero** registrarme con mis datos  
-**Para** poder acceder al sistema y gestionar pedidos
-
-### Criterios de Aceptacion
-```
-Scenario: Nuevo usuario se registra exitosamente
-  Given que el usuario no tiene cuenta
-  When el usuario ingresa email, username y password
-  And completa el registro
-  Then el sistema crea la cuenta
-  And inicia sesion automaticamente
-```
-
-### Escenarios (UI)
-- Registro exitoso dirige al usuario al dashboard y entrega token de acceso (si aplica).
-- Registro con email duplicado muestra error claro.
-- Cambio entre pantallas de login y registro funciona sin perder estado.
+Este documento presenta el refinamiento de las historias de usuario del módulo Frontend del sistema FoodTech, generado mediante el apoyo de la herramienta SKAI y validado manualmente bajo los principios INVEST.
 
 ---
 
-## Notas de Refinamiento
-- Estas historias refinadas se alimentan de los requerimientos de UI/UX y de las decisiones de flujo en la capa de presentacion;
-- Se evita especificar detalles del backend que pueden cambiar de acuerdo a la implementacion; se centra en experiencia de usuario y en la expectativa de respuesta de la UI.
-USER_STORIES_REFINEMENT.md
+## 🎯 Objetivo del Refinamiento
+
+Mejorar la calidad de las historias de usuario originales mediante:
+
+- Mayor claridad funcional  
+- Inclusión de criterios de aceptación formales (Gherkin)  
+- Incorporación de aspectos técnicos (JWT, seguridad, sesiones)  
+- Identificación de escenarios alternativos y edge cases  
+
+---
+
+## 🔧 Cambios Principales
+
+- Adición de validaciones de seguridad  
+- Especificación del uso de JWT para autenticación  
+- Definición de política de contraseñas  
+- Inclusión de flujos alternativos (modo demo, remember me)  
+- Mejora en la definición de actores y contexto  
+
+---
+
+# 🔐 HU-FRONT-010: Iniciar Sesión (Login)
+
+## 📄 Descripción
+
+Como usuario registrado del sistema de restaurante, quiero autenticarme mediante email y password para acceder de forma segura al panel de gestión de pedidos y obtener un token de sesión válido.
+
+## ✅ Criterios de Aceptación
+
+### 🟢 Escenario: Login exitoso
+
+- **Given** que el usuario tiene una cuenta registrada  
+- **When** ingresa email y password correctos  
+- **Then** el sistema inicia sesión exitosamente  
+- **And** guarda el token de autenticación  
+- **And** redirige a la vista principal  
+
+---
+
+### 🔴 Escenario: Password incorrecto
+
+- **Given** que el usuario tiene una cuenta registrada  
+- **When** ingresa email correcto pero password incorrecto  
+- **Then** el sistema muestra el error `"Credenciales inválidas"`  
+- **And** no inicia sesión  
+
+---
+
+### 🟡 Escenario: Recordarme (sesión persistente)
+
+- **Given** que el usuario tiene una cuenta registrada  
+- **When** marca la opción `"recordarme"`  
+- **And** inicia sesión  
+- **Then** el sistema guarda el token con fecha de expiración  
+- **And** la sesión persiste después de cerrar el navegador  
+
+---
+
+### 🔵 Escenario: Modo demo
+
+- **Given** que el usuario no tiene cuenta  
+- **When** activa el modo demo  
+- **Then** el sistema permite acceso sin autenticación  
+- **And** crea una sesión de demo  
+
+---
+
+# 🚪 HU-FRONT-011: Cerrar Sesión (Logout)
+
+## 📄 Descripción
+
+Como usuario autenticado con sesión activa, quiero cerrar sesión de forma manual o automática para invalidar el token de autenticación y proteger mi cuenta de accesos no autorizados.
+
+## ✅ Criterios de Aceptación
+
+### 🟢 Escenario: Logout manual
+
+- **Given** que el usuario está autenticado  
+- **When** hace click en `"Cerrar Sesión"`  
+- **Then** el sistema elimina el token de autenticación  
+- **And** redirige a la página de login  
+
+---
+
+### ⏱️ Escenario: Expiración de sesión
+
+- **Given** que el usuario tiene una sesión activa  
+- **When** el token de autenticación expira  
+- **Then** el sistema cierra sesión automáticamente  
+- **And** redirige a la página de login  
+
+---
+
+# 🧾 HU-FRONT-012: Registro de Usuario
+
+## 📄 Descripción
+
+Como nuevo usuario del sistema de restaurante, quiero crear una cuenta proporcionando email válido, username único y password segura para obtener acceso autenticado al sistema de gestión de pedidos.
+
+## ✅ Criterios de Aceptación
+
+### 🟢 Escenario: Registro exitoso
+
+- **Given** que el usuario no tiene cuenta  
+- **When** ingresa email, username y password  
+- **And** completa el registro  
+- **Then** el sistema crea la cuenta  
+- **And** inicia sesión automáticamente  
+
+---
+
+### 🔴 Escenario: Email ya registrado
+
+- **Given** que ya existe una cuenta con ese email  
+- **When** intenta registrarse con ese email  
+- **Then** el sistema muestra un error  
+- **And** no crea la cuenta  
+
+---
+
+### 🔄 Escenario: Cambio entre login y registro
+
+- **Given** que el usuario está en la página de login  
+- **When** hace click en `"Regístrate"`  
+- **Then** el formulario cambia a modo registro  
+- **And** permite completar el registro  
+
+---
+
+# 📊 Cuadro Comparativo - Historias de Usuario (Frontend)
+
+---
+
+## 🔐 HU-FRONT-010: Iniciar Sesión (Login)
+
+| HU Original | HU Refinada | Diferencias Detectadas |
+|------------|------------|------------------------|
+| **Como** usuario del sistema de restaurante  <br> **Quiero** iniciar sesión con mis credenciales  <br> **Para** acceder al sistema y gestionar pedidos | **Como** usuario registrado del sistema de restaurante  <br> **Quiero** autenticarme mediante email y password  <br> **Para** acceder de forma segura al panel de gestión de pedidos y obtener un token de sesión válido | - Se especificó **"usuario registrado"** para mayor precisión del actor  <br> - Se añadió detalle técnico del mecanismo **JWT**  <br> - Se añadió criterio de **"recordarme"** con expiración extendida  <br> - Se añadió el escenario de **modo demo sin cuenta** |
+
+---
+
+## 🚪 HU-FRONT-011: Cerrar Sesión (Logout)
+
+| HU Original | HU Refinada | Diferencias Detectadas |
+|------------|------------|------------------------|
+| **Como** usuario autenticado  <br> **Quiero** cerrar sesión  <br> **Para** salir del sistema y proteger mi cuenta | **Como** usuario autenticado con sesión activa  <br> **Quiero** cerrar sesión de forma manual o automática  <br> **Para** invalidar el token de autenticación y proteger mi cuenta de accesos no autorizados | - Se añadió condición **"con sesión activa"** como precondición  <br> - Se añadió el escenario de **logout automático por expiración de token**  <br> - Se añadió **limpieza de datos de sesión en el cliente** |
+
+---
+
+## 🧾 HU-FRONT-012: Registro de Usuario
+
+| HU Original | HU Refinada | Diferencias Detectadas |
+|------------|------------|------------------------|
+| **Como** nuevo usuario del sistema  <br> **Quiero** registrarme con mis datos  <br> **Para** poder acceder al sistema y gestionar pedidos | **Como** nuevo usuario del sistema de restaurante  <br> **Quiero** crear una cuenta proporcionando email válido, username único y password segura  <br> **Para** obtener acceso autenticado al sistema de gestión de pedidos | - Se añadió validación de formato de email (**sintaxis RFC**)  <br> - Se añadió validación de longitud de username (**3-20 caracteres**)  <br> - Se añadió política de password (**mínimo 8 caracteres, mayúscula, número**)  <br> - Se añadió verificación de **unicidad de email y username**  <br> - Se añadió generación de **token JWT post-registro** |
+
+---
